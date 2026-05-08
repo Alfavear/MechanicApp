@@ -1,39 +1,37 @@
-import { NavLink, Routes, Route } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 import Dashboard from './components/Dashboard';
 import Vehicles from './components/Vehicles';
 import Mechanics from './components/Mechanics';
 import Workorders from './components/Workorders';
 import Inventory from './components/Inventory';
 import Invoices from './components/Invoices';
+import AppLayout from './components/AppLayout';
+import ServicesCatalog from './components/ServicesCatalog';
+import PublicBoard from './components/PublicBoard';
+import ConsentDocument from './components/ConsentDocument';
+import SatisfactionDocument from './components/SatisfactionDocument';
 import './App.css';
 
 function App() {
   return (
-    <div className="app-shell">
-      <aside className="sidebar">
-        <h1>Taller Mecánico</h1>
-        <nav>
-          <NavLink to="/" end>
-            Dashboard
-          </NavLink>
-          <NavLink to="/vehicles">Vehículos</NavLink>
-          <NavLink to="/mechanics">Mecánicos</NavLink>
-          <NavLink to="/workorders">Órdenes</NavLink>
-          <NavLink to="/inventory">Inventario</NavLink>
-          <NavLink to="/invoices">Facturación</NavLink>
-        </nav>
-      </aside>
-      <main className="content">
-        <Routes>
-          <Route path="/" element={<Dashboard />} />
-          <Route path="/vehicles" element={<Vehicles />} />
-          <Route path="/mechanics" element={<Mechanics />} />
-          <Route path="/workorders" element={<Workorders />} />
-          <Route path="/inventory" element={<Inventory />} />
-          <Route path="/invoices" element={<Invoices />} />
-        </Routes>
-      </main>
-    </div>
+    <Routes>
+      <Route path="/board" element={<PublicBoard />} />
+      <Route path="/consent" element={<ConsentDocument />} />
+      <Route path="/satisfaction" element={<SatisfactionDocument />} />
+      <Route path="/*" element={
+        <AppLayout title="MechanicApp">
+          <Routes>
+            <Route path="/" element={<Dashboard />} />
+            <Route path="/vehicles" element={<Vehicles />} />
+            <Route path="/mechanics" element={<Mechanics />} />
+            <Route path="/workorders" element={<Workorders />} />
+            <Route path="/inventory" element={<Inventory />} />
+            <Route path="/services" element={<ServicesCatalog />} />
+            <Route path="/invoices" element={<Invoices />} />
+          </Routes>
+        </AppLayout>
+      } />
+    </Routes>
   );
 }
 

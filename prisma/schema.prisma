@@ -24,6 +24,7 @@ model Mechanic {
   name        String
   specialty   String?
   phone       String?
+  status      String      @default("Disponible")
   created_at  DateTime    @default(now())
   workorders  Workorder[]
 }
@@ -32,15 +33,46 @@ model Workorder {
   id                 Int              @id @default(autoincrement())
   vehicle_id         Int
   mechanic_id        Int
-  status             String
-  description        String?
-  estimated_delivery DateTime?
-  created_at         DateTime         @default(now())
-  updated_at         DateTime         @updatedAt
+  status                   String
+  description              String?
+  estimated_delivery       DateTime?
+  customer_provided_parts  Boolean          @default(false)
+  entry_observations       String?
+  created_at               DateTime         @default(now())
+  updated_at               DateTime         @updatedAt
   vehicle            Vehicle          @relation(fields: [vehicle_id], references: [id])
   mechanic           Mechanic         @relation(fields: [mechanic_id], references: [id])
   parts              WorkorderPart[]
+  services           WorkorderService[]
+  photos             WorkorderPhoto[]
   invoices           Invoice[]
+}
+
+model WorkorderPhoto {
+  id           Int       @id @default(autoincrement())
+  workorder_id Int
+  url          String
+  created_at   DateTime  @default(now())
+  workorder    Workorder @relation(fields: [workorder_id], references: [id])
+}
+
+model ServiceCatalog {
+  id               Int                @id @default(autoincrement())
+  name             String
+  description      String?
+  suggested_price  Float
+  created_at       DateTime           @default(now())
+  workorder_uses   WorkorderService[]
+}
+
+model WorkorderService {
+  id           Int            @id @default(autoincrement())
+  workorder_id Int
+  service_id   Int
+  price        Float
+  created_at   DateTime       @default(now())
+  workorder    Workorder      @relation(fields: [workorder_id], references: [id])
+  service      ServiceCatalog @relation(fields: [service_id], references: [id])
 }
 
 model InventoryItem {

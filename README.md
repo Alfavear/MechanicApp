@@ -1,60 +1,54 @@
-# Plataforma de Taller Mecánico
+# MechanicApp (Plataforma de Taller Mecánico Premium)
 
-Aplicación para gestionar el flujo de vehículos desde la entrada hasta la salida, control de estados, asignación de mecánicos, uso de repuestos, inventarios y facturación.
+Sistema profesional para la gestión de talleres automotrices, control de operaciones, facturación automatizada y seguimiento en tiempo real. 
 
-## Características iniciales
+## Características Principales
 
-- Gestión de órdenes de trabajo con estados: Pendiente, En revisión, En prueba de ruta, Pendiente por entregar, Entregado.
-- Registro de vehículos y su historial.
-- Control de mecánicos asignados.
-- Inventario de repuestos y consumo por orden de trabajo.
-- API REST para módulos administrativos y contables.
+*   **Pantalla Pública (Flight Board):** Tablero en tiempo real diseñado para salas de espera (`/board`), mostrando el estado de los vehículos con privacidad de placas.
+*   **Gestión Operativa:** Control de flujo de órdenes con estados dinámicos ("Pendiente", "En Revisión", "Suspendido por repuestos").
+*   **Inventario y Requisición:** El mecánico solicita piezas que se descuentan automáticamente del inventario y se asignan a la orden activa.
+*   **Tarifario de Servicios:** Catálogo estandarizado de mano de obra y servicios especializados.
+*   **Documentos Legales (Print-Ready):** 
+    *   *Consentimiento de Repuestos:* Exoneración cuando el cliente trae sus propias piezas.
+    *   *Acta de Entrega a Satisfacción:* Documento formal de entrega con observaciones del estado del vehículo.
+*   **Facturación Automatizada:** Generación instantánea de la cuenta sumando el costo de los repuestos consumidos y los servicios prestados.
+*   **Diseño Visual Premium:** Interfaz de alta densidad de información estilo "Avalon/Datadog" con componentes modernos y responsivos.
 
-## Instalación
+## Stack Tecnológico
 
-1. Instala dependencias:
+*   **Backend:** Node.js, Express, Prisma ORM
+*   **Base de Datos:** PostgreSQL (Neon Serverless)
+*   **Frontend:** React, Vite, Tailwind CSS, Recharts, Lucide Icons
 
-   ```bash
-   npm install
-   ```
+## Instalación y Configuración
 
-2. Configura la conexión a PostgreSQL en `.env`:
+1.  Instala las dependencias principales y del frontend:
+    ```bash
+    npm install
+    cd frontend && npm install && cd ..
+    ```
 
-   ```bash
-   DATABASE_URL="postgresql://USER:PASSWORD@HOST:5432/mechanicapp?schema=public"
-   ```
+2.  Configura tu base de datos PostgreSQL en el archivo `.env`:
+    ```env
+    DATABASE_URL="postgresql://USER:PASSWORD@HOST:5432/neondb?schema=public"
+    ```
 
-3. Genera el cliente Prisma y crea el esquema en la base de datos:
+3.  Sincroniza la base de datos con Prisma:
+    ```bash
+    npx prisma db push
+    ```
 
-   ```bash
-   npm run db:generate
-   npm run migrate
-   ```
+4.  Inicia la aplicación (Backend y Frontend en modo desarrollo):
+    ```bash
+    npm run dev
+    # (Asegúrate de ejecutar 'npm run frontend:dev' en otra terminal si 'npm run dev' no lo levanta concurrentemente)
+    ```
 
-4. Inicia el servidor:
+## Estructura del Proyecto
 
-   ```bash
-   npm run dev
-   ```
+*   `backend/` - Servidor Express y rutas API REST.
+*   `frontend/src/components/` - Vistas React (Dashboard, Inventario, Órdenes, etc.).
+*   `prisma/schema.prisma` - Modelo de datos de la plataforma.
 
-4. Inicia el frontend:
-
-   ```bash
-   npm run frontend:dev
-   ```
-
-## Estructura
-
-- `backend/server.js` - servidor principal.
-- `backend/db.js` - Prisma client con PostgreSQL.
-- `backend/routes/` - endpoints de vehículos, órdenes, inventario, mecánicos y facturación.
-- `frontend/` - aplicación React/Vite para administración.
-
-## Próximos pasos
-
-- Implementar autenticación y roles.
-- Añadir módulo de facturación y reports contables.
-
-## Bitácora
-
-- Consulta el archivo `bitacora.md` para ver el historial de cambios y el estado del desarrollo.
+## Bitácora de Desarrollo
+Consulta el archivo `bitacora.md` para ver el historial completo de cambios y las actualizaciones operativas.
