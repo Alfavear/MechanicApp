@@ -1,0 +1,18 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Inter, system-ui, sans-serif;
+  background: #f4f7fb;
+  color: #0f172a;
+}
+
+button {
+  font: inherit;
+}
+
+a {
+  font: inherit;
+}

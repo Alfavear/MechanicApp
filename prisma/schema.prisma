@@ -1,0 +1,98 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Vehicle {
+  id           Int         @id @default(autoincrement())
+  license_plate String      @unique
+  brand        String?
+  model        String?
+  year         Int?
+  owner_name   String?
+  owner_phone  String?
+  created_at   DateTime    @default(now())
+  workorders   Workorder[]
+}
+
+model Mechanic {
+  id          Int         @id @default(autoincrement())
+  name        String
+  specialty   String?
+  phone       String?
+  created_at  DateTime    @default(now())
+  workorders  Workorder[]
+}
+
+model Workorder {
+  id                 Int              @id @default(autoincrement())
+  vehicle_id         Int
+  mechanic_id        Int
+  status             String
+  description        String?
+  estimated_delivery DateTime?
+  created_at         DateTime         @default(now())
+  updated_at         DateTime         @updatedAt
+  vehicle            Vehicle          @relation(fields: [vehicle_id], references: [id])
+  mechanic           Mechanic         @relation(fields: [mechanic_id], references: [id])
+  parts              WorkorderPart[]
+  invoices           Invoice[]
+}
+
+model InventoryItem {
+  id          Int               @id @default(autoincrement())
+  name        String
+  sku         String?           @unique
+  quantity    Int               @default(0)
+  cost_price  Float?
+  sale_price  Float?
+  created_at  DateTime          @default(now())
+  purchases   InventoryPurchase[]
+  sales       InventorySale[]
+  used_in     WorkorderPart[]
+}
+
+model InventoryPurchase {
+  id            Int           @id @default(autoincrement())
+  item_id       Int
+  quantity      Int
+  total_cost    Float?
+  supplier      String?
+  purchase_date DateTime      @default(now())
+  item          InventoryItem @relation(fields: [item_id], references: [id])
+}
+
+model InventorySale {
+  id          Int           @id @default(autoincrement())
+  item_id     Int
+  quantity    Int
+  total_price Float?
+  customer    String?
+  sale_date   DateTime      @default(now())
+  item        InventoryItem @relation(fields: [item_id], references: [id])
+}
+
+model WorkorderPart {
+  id           Int           @id @default(autoincrement())
+  workorder_id Int
+  item_id      Int
+  quantity     Int
+  used_at      DateTime      @default(now())
+  workorder    Workorder     @relation(fields: [workorder_id], references: [id])
+  item         InventoryItem @relation(fields: [item_id], references: [id])
+}
+
+model Invoice {
+  id             Int       @id @default(autoincrement())
+  workorder_id   Int
+  invoice_number String
+  amount         Float
+  tax            Float?
+  status         String?
+  date           DateTime  @default(now())
+  workorder      Workorder @relation(fields: [workorder_id], references: [id])
+}
